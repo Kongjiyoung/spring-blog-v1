@@ -34,11 +34,25 @@ public class UserRepository { //= dao
         em.persist(user);
     }
 
-    //Transactional select 할땐 필요없음
+    //Transactional select 할땐 필요없음 : 바뀌는 행이 없으므로
     public User findByUsernameAndPassword(UserRequest.loginDTO requestDTO) { //조회
         Query query=em.createNativeQuery("select * from user_tb where username=? and password=?", User.class); //user타입(엔티티)으로 바로 맵핑할 수 있음, 엔티티=테이블
         query.setParameter(1, requestDTO.getUsername());
         query.setParameter(2, requestDTO.getPassword());
+
+        try{
+            User user=(User)query.getSingleResult(); //하나의 행을 리턴할때 여러개는 resultlist
+            return user;
+        }catch (Exception e){
+            return null;
+        }
+        //query.executeUpdate();업데이트할게 아님
+
+    }
+
+    public User findByUsername(UserRequest.loginDTO requestDTO) { //조회
+        Query query=em.createNativeQuery("select * from user_tb where username=? ", User.class); //user타입(엔티티)으로 바로 맵핑할 수 있음, 엔티티=테이블
+        query.setParameter(1, requestDTO.getUsername());
 
         try{
             User user=(User)query.getSingleResult(); //하나의 행을 리턴할때 여러개는 resultlist

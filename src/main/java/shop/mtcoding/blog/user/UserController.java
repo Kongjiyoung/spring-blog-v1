@@ -30,13 +30,14 @@ public class UserController {
 //    }
     @PostMapping("/login")
     public String login(UserRequest.loginDTO requestDTO){ //쿼리스트링으로 담아야하지만 예외로 로그인은 post요청함 원래는 get요청
-        //1. 유효성 검사
+        //1. 유효성 검사 //컨트롤러에서는 데이터베이스의 값과 비교해서 값을 체크하는게 아님,
         if(requestDTO.getUsername().length() <3){
             return "error/400";
         }
 
-        //2. 모델 필요 select
-        User user=userRepository.findByUsernameAndPassword(requestDTO);
+
+
+        //2. (모델필요 select)
 
         if(user == null){
             return "error/401";
@@ -58,7 +59,18 @@ public class UserController {
         if(requestDTO.getUsername().length() <3){
             return "error/400";
         }
+
+        //2. 동일 username 체크
+        User user=userRepository.findByUsername(requestDTO.getUsername());
+        if (user == null){
+            userRepository.save(requestDTO);
+        }else {
+            return "error/400";
+        }
+
+
         //2. Model에게 위임하기
+
         userRepository.save(requestDTO);
 
         return "redirect:/loginForm"; //리다이렉션불러놓은게 있어서 다시부른거
