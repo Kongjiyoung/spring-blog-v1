@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user_tb")
 public class User {//유저데이터베이스값을 받음
-    @Id
+    @Id //primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)//auto
     private int id;
 

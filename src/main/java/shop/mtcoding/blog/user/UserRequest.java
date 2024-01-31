@@ -20,8 +20,5 @@ public class UserRequest {//유저한테 요청하는 데이터를 할때, 따�
         private String username;
         private String password;
     }
-//
-//    public static void main(String[] args) {
-//        UserRequest.JoinDTO joinDTO = new UserRequest.JoinDTO();
-//    }
+
 }
