@@ -65,7 +65,7 @@ public class UserController {
         if (user == null){
             userRepository.save(requestDTO);
         }else {
-            return "error/400";
+            return "error/401";
         }
 
 
