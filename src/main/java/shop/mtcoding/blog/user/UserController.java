@@ -38,7 +38,7 @@ public class UserController {
 
 
         //2. (모델필요 select)
-
+        User user=userRepository.findByUsernameAndPassword(requestDTO);
         if(user == null){
             return "error/401";
         }else{
@@ -61,7 +61,7 @@ public class UserController {
         }
 
         //2. 동일 username 체크
-        User user=userRepository.findByUsername(requestDTO.getUsername());
+        User user=userRepository.findByUsername(requestDTO);
         if (user == null){
             userRepository.save(requestDTO);
         }else {
@@ -93,6 +93,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout() {
+        session.invalidate(); //1번 서랍안에 있는 내용을 다 삭제
         return "redirect:/";
     }
 

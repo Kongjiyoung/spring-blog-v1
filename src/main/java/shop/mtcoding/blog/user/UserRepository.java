@@ -50,7 +50,7 @@ public class UserRepository { //= dao
 
     }
 
-    public User findByUsername(UserRequest.loginDTO requestDTO) { //조회
+    public User findByUsername(UserRequest.JoinDTO requestDTO) { //조회
         Query query=em.createNativeQuery("select * from user_tb where username=? ", User.class); //user타입(엔티티)으로 바로 맵핑할 수 있음, 엔티티=테이블
         query.setParameter(1, requestDTO.getUsername());
 
