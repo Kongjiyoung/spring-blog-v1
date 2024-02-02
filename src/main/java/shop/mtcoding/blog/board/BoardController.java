@@ -81,7 +81,7 @@ public class BoardController {
         int prevPage = currentPage-1;
         request.setAttribute("nextPage", nextPage);
         request.setAttribute("prevPage", prevPage);
-        // 이것만 담으면 디세이브를 못한다.
+        // 이것만 담으면 디스에이블(disabled java.io.BufferedReader  )를 못한다.
 
         // 현재 페이지가 퍼스트인지 라스트인지 만든다.
 
