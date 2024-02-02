@@ -52,27 +52,20 @@
 //}
 package shop.mtcoding.blog.board;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.PagingUtil;
 import shop.mtcoding.blog.user.User;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 public class BoardController {
-
+    //IoC 컨테이너에 세션에 접근할 수 있는 변수가 들어가 있음. DI하면됨
     private final HttpSession session;
     private final BoardRepository boardRepository;
 
@@ -120,8 +113,30 @@ public class BoardController {
         return "board/saveForm";
     }
 
-    @GetMapping("/board/1")
-    public String detail() {
-        return "board/detail";
+    @GetMapping("/board/{id}") //1은 pk키이다
+    public String detail(@PathVariable int id, HttpServletRequest request) { //파싱하고 int id로 바로 받아준다
+        System.out.println("id : "+id);
+
+        BoardResponse.DetailDTO responseDTO = boardRepository.findById(id);
+        request.setAttribute("board", responseDTO);
+        //BoardRepository.findById(id);
+
+        //1. session 정보에 접근해서 user의 id가져오기
+        boolean owner=false;
+
+        User user= (User) session.getAttribute("sessionUser"); //sessionUser로 넣었으니깐 sessionUser로 해야함
+        //int sessionUserId =user.getId();
+        //2. responseDTO안에 있는 user의 id를 가져오기
+        int boardUserId= responseDTO.getUserId();
+
+        //3. 로그인 여부 체크
+        if (user!=null){ //로그인 했고
+            if(boardUserId==user.getId()){
+                owner=true;
+            }
+        }
+        request.setAttribute("owner", owner);
+
+        return "board/detail"; //포워드가 발동함
     }
 }
